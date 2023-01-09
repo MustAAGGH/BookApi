@@ -10,9 +10,10 @@ namespace Services.Interfaces
 {
     public interface IAuthorService
     {
+        public List<Authors> GetAuthors();
         public AuthorModel GetAuthor(int Id);
-        public Authors Create(AuthorModel model);
-        public Authors Update(AuthorModel model, int Id);
+        public bool Create(AuthorModel model);
+        public bool Update(AuthorModel model, int Id);
         public bool Delete(int Id);
     }
 }

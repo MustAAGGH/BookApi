@@ -11,32 +11,18 @@ namespace Services
         {
             DataContext = dataContext;
         }
-        public Books Create(BookModel model)
+        public bool Create(BookModel model)
         {
             Authors? author = DataContext.Autors.Where(a => a.Name == model.Author).FirstOrDefault();
             Genres? genre = DataContext.Genres.Where(g => g.Name == model.Genre).FirstOrDefault();
-            if(author == null)
+            if (author == null)
             {
-                Authors newA = new Authors()
-                {
-                    Name = model.Author
-                };
-                DataContext.Autors.Add(newA);
-                DataContext.SaveChanges();
+                return false;
             }
             if (genre == null)
             {
-                Genres newG = new Genres()
-                {
-                    Name = model.Genre
-                };
-                DataContext.Genres.Add(newG);
-                DataContext.SaveChanges();
+                return false;
             }
-
-            author = DataContext.Autors.Where(a => a.Name == model.Author).FirstOrDefault();
-            genre = DataContext.Genres.Where(g => g.Name == model.Genre).FirstOrDefault();
-
 
             Books book = new Books()
             {
@@ -48,15 +34,13 @@ namespace Services
 
             DataContext.Books.Add(book);
             DataContext.SaveChanges();
-
-            Books result = DataContext.Books.Where(b => b.Title == model.Title).FirstOrDefault();
-            return result;
+            return true;
         }
 
         public bool Delete(int Id)
         {
             Books? book = DataContext.Books.Find(Id);
-            if(book == null)
+            if (book == null)
             {
                 return false;
             }
@@ -64,12 +48,15 @@ namespace Services
             DataContext.SaveChanges();
             return true;
         }
-
+        public List<Books> GetBooks()
+        {
+            return DataContext.Books.ToList();
+        }
         public BookModel GetBook(int Id)
         {
             Books? book = DataContext.Books.Find(Id);
             BookModel model = new BookModel();
-            if( book == null)
+            if (book == null)
             {
                 return model;
             }
@@ -77,39 +64,43 @@ namespace Services
             Genres? genre = DataContext.Genres.Where(g => g.Id == book.GenreId).FirstOrDefault();
             model.Title = book.Title;
             model.PublishingYear = book.PublishingYear;
-            if(author != null)
+            if (author != null)
             {
                 model.Author = author.Name;
             }
-            if(genre != null)
+            if (genre != null)
             {
                 model.Genre = genre.Name;
             }
             return model;
         }
 
-        public Books Update(BookModel model, int Id)
+        public bool Update(BookModel model, int Id)
         {
             Books? book = DataContext.Books.Find(Id);
             if (book == null)
             {
                 book = new Books();
-                return book;
+                return false;
             }
+
             Authors? author = DataContext.Autors.Where(a => a.Name == model.Author).FirstOrDefault();
             Genres? genre = DataContext.Genres.Where(g => g.Name == model.Genre).FirstOrDefault();
+            if (author == null)
+            {
+                return false;
+            }
+            if (genre == null)
+            {
+                return false;
+            }
+
             book.Title = model.Title;
             book.PublishingYear = model.PublishingYear;
-            if(author != null)
-            {
-                book.AuthorId = author.Id;
-            }
-            if(genre != null)
-            {
-                book.GenreId = genre.Id;
-            }
+            book.AuthorId = author.Id;
+            book.GenreId = genre.Id;
             DataContext.SaveChanges();
-            return book;
+            return true;
         }
     }
 }

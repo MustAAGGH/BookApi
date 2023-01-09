@@ -17,7 +17,7 @@ namespace Services
             DataContext = dataContext;
         }
 
-        public Authors Create(AuthorModel model)
+        public bool Create(AuthorModel model)
         {
             Authors author = new Authors()
             {
@@ -25,7 +25,7 @@ namespace Services
             };
             DataContext.Autors.Add(author);
             DataContext.SaveChanges();
-            return author;
+            return true;
         }
 
         public bool Delete(int Id)
@@ -39,7 +39,10 @@ namespace Services
             DataContext.SaveChanges();
             return true;
         }
-
+        public List<Authors> GetAuthors()
+        {
+            return DataContext.Autors.ToList();
+        }
         public AuthorModel GetAuthor(int Id)
         {
             Authors? author = DataContext.Autors.Find(Id);
@@ -51,17 +54,16 @@ namespace Services
             model.Name = author.Name;
             return model;
         }
-        public Authors Update(AuthorModel model, int Id)
+        public bool Update(AuthorModel model, int Id)
         {
             Authors? author = DataContext.Autors.Find(Id);
             if (author == null)
             {
-                author = new Authors();
-                return author;
+                return false;
             }
             author.Name = model.Name;
             DataContext.SaveChanges();
-            return author;
+            return true;
         }
     }
 }

@@ -1,5 +1,8 @@
 using Data;
 using Microsoft.EntityFrameworkCore;
+using Services;
+using Services.Interfaces;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,11 @@ builder.Services.AddDbContext<DataContext>(
     b => b.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddTransient<IBookService, BookService>();
+builder.Services.AddTransient<IAuthorService, AuthorService>();
+builder.Services.AddTransient<IGenreService, GenreService>();
+builder.Services.AddTransient<IDataService, DataService>();
+
 
 var app = builder.Build();
 

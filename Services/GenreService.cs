@@ -17,7 +17,7 @@ namespace Services
             DataContext = dataContext;
         }
 
-        public Genres Create(GenreModel model)
+        public bool Create(GenreModel model)
         {
             Genres genre = new Genres()
             {
@@ -25,7 +25,7 @@ namespace Services
             };
             DataContext.Genres.Add(genre);
             DataContext.SaveChanges();
-            return genre;
+            return true;
         }
 
         public bool Delete(int Id)
@@ -39,7 +39,10 @@ namespace Services
             DataContext.SaveChanges();
             return true;
         }
-
+        public List<Genres> GetGenres()
+        {
+            return DataContext.Genres.ToList();
+        }
         public GenreModel GetGenre(int Id)
         {
             Genres? genre = DataContext.Genres.Find(Id);
@@ -52,17 +55,16 @@ namespace Services
             return model;
         }
 
-        public Genres Update(GenreModel model, int Id)
+        public bool Update(GenreModel model, int Id)
         {
             Genres? genre = DataContext.Genres.Find(Id);
             if (genre == null)
             {
-                genre = new Genres();
-                return genre;
+                return false;
             }
             genre.Name = model.Name;
             DataContext.SaveChanges();
-            return genre;
+            return true;
         }
     }
 }

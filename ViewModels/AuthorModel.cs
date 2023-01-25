@@ -9,6 +9,6 @@ namespace ViewModels
     public class AuthorModel
     {
         public string Name { get; set; }
-        public string Sorbeque { get; set; }
+      
     }
 }

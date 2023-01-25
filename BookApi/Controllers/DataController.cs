@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using ViewModels;
 
-namespace LibratyAPI.Controllers
+namespace BookApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
